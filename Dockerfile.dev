@@ -1,0 +1,14 @@
+FROM vectorapps/php:7.1
+
+WORKDIR /app
+
+COPY composer.json composer.lock ./
+RUN export COMPOSER_ALLOW_SUPERUSER=1 && \
+    composer install --no-scripts --no-autoloader
+
+COPY . .
+
+RUN export COMPOSER_ALLOW_SUPERUSER=1 && \
+    composer dump-autoload -o
+
+CMD composer dump-autoload -o && php -S 0.0.0.0:8000 -t public/

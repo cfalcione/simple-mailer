@@ -1,16 +1,26 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Application Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register all of the routes for an application.
-| It is a breeze. Simply tell Lumen the URIs it should respond to
-| and give it the Closure to call when that URI is requested.
-|
-*/
 
-$router->get('/', function () use ($router) {
-    return $router->app->version();
+/** @var $router \Laravel\Lumen\Routing\Router */
+
+use App\Mail\Contact;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+
+$router->post('/contact', function (Request $request) {
+    $params = $request->all();
+    $validator = \Illuminate\Support\Facades\Validator::make($params, [
+        'email' => 'email|required',
+        'name' => 'string|required',
+        'message' => 'string|required',
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json(['status' => 'INVALID_PARAMS'], 400);
+    }
+
+    Mail::to(config('mail.to_address'))
+        ->send(new Contact($params));
+
+    return response()->json(['status' => 'SUCCESS'], 200);
 });
