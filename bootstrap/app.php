@@ -28,6 +28,7 @@ $app = new Laravel\Lumen\Application(
  $app->configure('services');
  $app->configure('mail');
 
+ $app->register(\App\Providers\CatchAllOptionsRequestsProvider::class);
  $app->register(\Illuminate\Mail\MailServiceProvider::class);
 
 // $app->withEloquent();
@@ -64,9 +65,9 @@ $app->singleton(
 |
 */
 
-// $app->middleware([
-//    App\Http\Middleware\ExampleMiddleware::class
-// ]);
+ $app->middleware([
+    \App\Http\Middleware\CorsMiddleware::class,
+ ]);
 
 // $app->routeMiddleware([
 //     'auth' => App\Http\Middleware\Authenticate::class,

@@ -24,3 +24,7 @@ $router->post('/contact', function (Request $request) {
 
     return response()->json(['status' => 'SUCCESS'], 200);
 });
+
+$router->get('/ping', function () {
+    return response()->json(['msg' => 'pong']);
+});
